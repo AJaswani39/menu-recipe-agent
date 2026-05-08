@@ -55,11 +55,13 @@ function App() {
                 manualDish={agent.manualDish}
                 menu={agent.menu}
                 query={agent.query}
+                recipeOptions={agent.recipeOptions}
                 restaurantName={agent.restaurantName}
                 restaurantUrl={agent.restaurantUrl}
                 scrapeMenu={agent.scrapeMenu}
                 setManualDish={agent.setManualDish}
                 setQuery={agent.setQuery}
+                setRecipeOptions={agent.setRecipeOptions}
                 setRestaurantName={agent.setRestaurantName}
                 setRestaurantUrl={agent.setRestaurantUrl}
                 setSelectedItem={agent.setSelectedItem}
@@ -67,7 +69,10 @@ function App() {
                 uploadMenu={agent.uploadMenu}
               />
               <MenuList
+                explainSelectedItem={agent.explainSelectedItem}
                 filteredItems={agent.filteredItems}
+                itemExplanation={agent.itemExplanation}
+                loading={agent.loading}
                 menu={agent.menu}
                 pickItem={agent.pickItem}
                 selectedItem={agent.selectedItem}

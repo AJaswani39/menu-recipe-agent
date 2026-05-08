@@ -3,7 +3,8 @@ import logging
 from fastapi import Depends, FastAPI, HTTPException, Query
 
 from app.auth import AuthUser, enforce_rate_limit, get_recipe_rate_limit_per_minute, require_user
-from app.models import DishSelectionRequest
+from app.menu_explainer import explain_menu_item
+from app.models import DishSelectionRequest, MenuItemExplanationRequest
 from app.recipe import get_recipe
 from app.scraper import scrape_menu
 
@@ -27,3 +28,8 @@ def register(api: FastAPI) -> None:
     async def recipe(selection: DishSelectionRequest, user: AuthUser = Depends(require_user)):
         enforce_rate_limit(user, "recipe", get_recipe_rate_limit_per_minute())
         return await get_recipe(selection)
+
+    @api.post("/menu/explain")
+    async def explain(request: MenuItemExplanationRequest, user: AuthUser = Depends(require_user)):
+        enforce_rate_limit(user, "recipe", get_recipe_rate_limit_per_minute())
+        return await explain_menu_item(request)

@@ -2,6 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { apiRequest } from "../api";
 
 const TOKEN_STORAGE_KEY = "menu_recipe_agent_bearer_token";
+const DEFAULT_RECIPE_OPTIONS = {
+  servings: "4",
+  dietaryPreference: "",
+  spiceLevel: "",
+  equipment: "",
+  timeLimitMinutes: "",
+};
 
 export function useMenuRecipeAgent() {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_STORAGE_KEY) || "");
@@ -9,6 +16,7 @@ export function useMenuRecipeAgent() {
   const [restaurantUrl, setRestaurantUrl] = useState("");
   const [menu, setMenu] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [itemExplanation, setItemExplanation] = useState(null);
   const [manualDish, setManualDish] = useState("");
   const [query, setQuery] = useState("");
   const [recipe, setRecipe] = useState(null);
@@ -16,6 +24,7 @@ export function useMenuRecipeAgent() {
   const [activeHistoryId, setActiveHistoryId] = useState(null);
   const [restaurantName, setRestaurantName] = useState("");
   const [uploadFile, setUploadFile] = useState(null);
+  const [recipeOptions, setRecipeOptions] = useState(DEFAULT_RECIPE_OPTIONS);
   const [status, setStatus] = useState("Ready");
   const [loading, setLoading] = useState("");
   const [error, setError] = useState("");
@@ -56,6 +65,7 @@ export function useMenuRecipeAgent() {
     setError("");
     setRecipe(null);
     setSelectedItem(null);
+    setItemExplanation(null);
     setStatus("Scraping menu");
     try {
       const data = await request(`/menu?restaurant_url=${encodeURIComponent(restaurantUrl.trim())}`);
@@ -85,6 +95,7 @@ export function useMenuRecipeAgent() {
     setError("");
     setRecipe(null);
     setSelectedItem(null);
+    setItemExplanation(null);
     setStatus("Extracting uploaded menu");
     try {
       const body = new FormData();
@@ -141,6 +152,7 @@ export function useMenuRecipeAgent() {
           category: item?.category || null,
           price: item?.price || null,
           history_id: activeHistoryId,
+          ...buildRecipeCustomizationPayload(recipeOptions),
         }),
       });
       setMenu(data.menu);
@@ -157,9 +169,41 @@ export function useMenuRecipeAgent() {
 
   function pickItem(item) {
     setSelectedItem(item);
+    setItemExplanation(null);
     setManualDish(item.name);
     setRecipe(null);
     setError("");
+  }
+
+  async function explainSelectedItem() {
+    if (!token) {
+      setError("Add your bearer token before explaining a dish.");
+      return;
+    }
+    if (!selectedItem) {
+      setError("Select a dish first.");
+      return;
+    }
+    setLoading("explain");
+    setError("");
+    setStatus("Explaining dish");
+    try {
+      const data = await request("/menu/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          item: selectedItem,
+          restaurant_name: menu?.restaurant || restaurantName || null,
+        }),
+      });
+      setItemExplanation(data);
+      setStatus("Dish explanation ready");
+    } catch (err) {
+      setError(err.message);
+      setStatus("Dish explanation failed");
+    } finally {
+      setLoading("");
+    }
   }
 
   async function loadHistory() {
@@ -187,6 +231,7 @@ export function useMenuRecipeAgent() {
       setMenu(data.menu);
       setRecipe(data.recipe || null);
       setSelectedItem(null);
+      setItemExplanation(null);
       setManualDish(data.recipe?.dish || "");
       setRestaurantUrl(data.source_url || data.menu?.source_url || "");
       setActiveHistoryId(data.id);
@@ -250,6 +295,7 @@ export function useMenuRecipeAgent() {
     filteredItems,
     generateRecipe,
     historyItems,
+    itemExplanation,
     loading,
     manualDish,
     menu,
@@ -257,13 +303,16 @@ export function useMenuRecipeAgent() {
     pickItem,
     query,
     recipe,
+    recipeOptions,
     restaurantName,
     restaurantUrl,
     saveToken,
     scrapeMenu,
     selectedItem,
+    explainSelectedItem,
     setManualDish,
     setQuery,
+    setRecipeOptions,
     setRestaurantName,
     setRestaurantUrl,
     setSelectedItem,
@@ -274,4 +323,24 @@ export function useMenuRecipeAgent() {
     uploadMenu,
     setTokenDraft,
   };
+}
+
+function buildRecipeCustomizationPayload(options) {
+  return {
+    servings: toOptionalNumber(options.servings),
+    dietary_preference: toOptionalText(options.dietaryPreference),
+    spice_level: toOptionalText(options.spiceLevel),
+    equipment: toOptionalText(options.equipment),
+    time_limit_minutes: toOptionalNumber(options.timeLimitMinutes),
+  };
+}
+
+function toOptionalNumber(value) {
+  const parsed = Number.parseInt(String(value).trim(), 10);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function toOptionalText(value) {
+  const cleaned = String(value || "").trim();
+  return cleaned || null;
 }

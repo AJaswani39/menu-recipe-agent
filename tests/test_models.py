@@ -26,6 +26,31 @@ class ModelTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             AgentRunRequest(restaurant_url="https://example.com/menu", dish_name=" ")
 
+    def test_agent_request_normalizes_recipe_customizations(self):
+        request = AgentRunRequest(
+            restaurant_url="https://example.com/menu",
+            dish_name="Burger",
+            servings=2,
+            dietary_preference=" vegetarian ",
+            spice_level=" ",
+            equipment=" skillet ",
+            time_limit_minutes=30,
+        )
+
+        self.assertEqual(request.servings, 2)
+        self.assertEqual(request.dietary_preference, "vegetarian")
+        self.assertIsNone(request.spice_level)
+        self.assertEqual(request.equipment, "skillet")
+        self.assertEqual(request.time_limit_minutes, 30)
+
+    def test_agent_request_rejects_invalid_servings(self):
+        with self.assertRaises(ValidationError):
+            AgentRunRequest(
+                restaurant_url="https://example.com/menu",
+                dish_name="Burger",
+                servings=0,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

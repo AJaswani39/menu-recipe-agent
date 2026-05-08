@@ -5,11 +5,13 @@ export function MenuControls({
   manualDish,
   menu,
   query,
+  recipeOptions,
   restaurantName,
   restaurantUrl,
   scrapeMenu,
   setManualDish,
   setQuery,
+  setRecipeOptions,
   setRestaurantName,
   setRestaurantUrl,
   setSelectedItem,
@@ -79,7 +81,70 @@ export function MenuControls({
         </button>
       </div>
 
+      <div className="customization-grid">
+        <div>
+          <label htmlFor="servings">Servings</label>
+          <input
+            id="servings"
+            type="number"
+            min="1"
+            max="24"
+            value={recipeOptions.servings}
+            onChange={(event) => updateRecipeOption("servings", event.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="time-limit">Time limit</label>
+          <input
+            id="time-limit"
+            type="number"
+            min="5"
+            max="480"
+            value={recipeOptions.timeLimitMinutes}
+            onChange={(event) => updateRecipeOption("timeLimitMinutes", event.target.value)}
+            placeholder="Minutes"
+          />
+        </div>
+      </div>
+
+      <label htmlFor="dietary-preference">Dietary preference</label>
+      <input
+        id="dietary-preference"
+        value={recipeOptions.dietaryPreference}
+        onChange={(event) => updateRecipeOption("dietaryPreference", event.target.value)}
+        placeholder="Vegetarian, gluten-free, high protein"
+      />
+
+      <div className="customization-grid">
+        <div>
+          <label htmlFor="spice-level">Spice level</label>
+          <select
+            id="spice-level"
+            value={recipeOptions.spiceLevel}
+            onChange={(event) => updateRecipeOption("spiceLevel", event.target.value)}
+          >
+            <option value="">No preference</option>
+            <option value="mild">Mild</option>
+            <option value="medium">Medium</option>
+            <option value="hot">Hot</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="equipment">Equipment</label>
+          <input
+            id="equipment"
+            value={recipeOptions.equipment}
+            onChange={(event) => updateRecipeOption("equipment", event.target.value)}
+            placeholder="Air fryer, skillet"
+          />
+        </div>
+      </div>
+
       {error && <div className="error">{error}</div>}
     </form>
   );
+
+  function updateRecipeOption(key, value) {
+    setRecipeOptions((current) => ({ ...current, [key]: value }));
+  }
 }

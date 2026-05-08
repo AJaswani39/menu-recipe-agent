@@ -42,6 +42,11 @@ async def run_agent_request(
             category=selected.category if selected else request.category,
             price=selected.price if selected else request.price,
             source_url=selected.url if selected else request.restaurant_url,
+            servings=request.servings,
+            dietary_preference=request.dietary_preference,
+            spice_level=request.spice_level,
+            equipment=request.equipment,
+            time_limit_minutes=request.time_limit_minutes,
         )
     )
     if request.history_id:

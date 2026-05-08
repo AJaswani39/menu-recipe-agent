@@ -69,6 +69,7 @@ async def get_recipe(selection: DishSelectionRequest) -> RecipeResponse:
             steps=recipe["steps"],
             source="Curated internal starter dataset",
             confidence="similar",
+            servings=selection.servings,
             notes=(
                 "This is a high-confidence base recipe and may differ from "
                 "the exact restaurant version."
@@ -93,6 +94,7 @@ async def get_recipe(selection: DishSelectionRequest) -> RecipeResponse:
         ],
         source="Heuristic fallback template",
         confidence="estimated",
+        servings=selection.servings,
         notes=(
             "Gemini response unavailable and recipe not found in starter dataset."
         ),
@@ -123,7 +125,12 @@ async def _get_recipe_from_gemini(selection: DishSelectionRequest) -> RecipeResp
         f"Menu description: {selection.menu_description or 'not provided'}\n"
         f"Menu category: {selection.category or 'not provided'}\n"
         f"Listed price: {selection.price or 'not provided'}\n"
-        f"Source URL: {selection.source_url or 'not provided'}"
+        f"Source URL: {selection.source_url or 'not provided'}\n"
+        f"Servings: {selection.servings or 'not specified'}\n"
+        f"Dietary preference: {selection.dietary_preference or 'none'}\n"
+        f"Spice level: {selection.spice_level or 'not specified'}\n"
+        f"Available equipment: {selection.equipment or 'not specified'}\n"
+        f"Time limit minutes: {selection.time_limit_minutes or 'not specified'}"
     )
 
     payload = {
@@ -170,6 +177,7 @@ async def _get_recipe_from_gemini(selection: DishSelectionRequest) -> RecipeResp
         steps=steps,
         source=f"Google Gemini ({model})",
         confidence=confidence,
+        servings=selection.servings,
         notes=notes,
     )
 

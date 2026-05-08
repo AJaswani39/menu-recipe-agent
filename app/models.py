@@ -18,12 +18,35 @@ class MenuScrapeResponse(BaseModel):
     menu_items: List[MenuItem]
 
 
+class MenuItemExplanationRequest(BaseModel):
+    item: MenuItem
+    restaurant_name: Optional[str] = None
+
+    @field_validator("restaurant_name")
+    @classmethod
+    def normalize_restaurant_name(cls, value: Optional[str]) -> Optional[str]:
+        if value is None:
+            return None
+        cleaned = value.strip()
+        return cleaned or None
+
+
+class MenuItemExplanationResponse(BaseModel):
+    summary: str
+    flavor_profile: List[str]
+    likely_allergens: List[str]
+    substitutions: List[str]
+    confidence: str
+    source: str
+
+
 class RecipeResponse(BaseModel):
     dish: str
     ingredients: List[str]
     steps: List[str]
     source: str
     confidence: str
+    servings: Optional[int] = Field(default=None, ge=1, le=24)
     notes: Optional[str] = None
 
 
@@ -52,6 +75,11 @@ class DishSelectionRequest(BaseModel):
     category: Optional[str] = None
     price: Optional[str] = None
     source_url: Optional[str] = None
+    servings: Optional[int] = Field(default=None, ge=1, le=24)
+    dietary_preference: Optional[str] = Field(default=None, max_length=80)
+    spice_level: Optional[str] = Field(default=None, max_length=40)
+    equipment: Optional[str] = Field(default=None, max_length=120)
+    time_limit_minutes: Optional[int] = Field(default=None, ge=5, le=480)
 
     @field_validator("dish_name")
     @classmethod
@@ -60,6 +88,14 @@ class DishSelectionRequest(BaseModel):
         if not cleaned:
             raise ValueError("dish_name cannot be blank")
         return cleaned
+
+    @field_validator("dietary_preference", "spice_level", "equipment")
+    @classmethod
+    def normalize_optional_text(cls, value: Optional[str]) -> Optional[str]:
+        if value is None:
+            return None
+        cleaned = value.strip()
+        return cleaned or None
 
 
 class AgentRunRequest(BaseModel):
@@ -71,6 +107,11 @@ class AgentRunRequest(BaseModel):
     category: Optional[str] = None
     price: Optional[str] = None
     history_id: Optional[str] = None
+    servings: Optional[int] = Field(default=None, ge=1, le=24)
+    dietary_preference: Optional[str] = Field(default=None, max_length=80)
+    spice_level: Optional[str] = Field(default=None, max_length=40)
+    equipment: Optional[str] = Field(default=None, max_length=120)
+    time_limit_minutes: Optional[int] = Field(default=None, ge=5, le=480)
 
     @field_validator("restaurant_url", "dish_name")
     @classmethod
@@ -79,3 +120,11 @@ class AgentRunRequest(BaseModel):
         if not cleaned:
             raise ValueError("value cannot be blank")
         return cleaned
+
+    @field_validator("dietary_preference", "spice_level", "equipment")
+    @classmethod
+    def normalize_optional_text(cls, value: Optional[str]) -> Optional[str]:
+        if value is None:
+            return None
+        cleaned = value.strip()
+        return cleaned or None
