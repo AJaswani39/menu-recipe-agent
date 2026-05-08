@@ -79,6 +79,10 @@ class UploadRouteTests(HistoryStoreSandbox, unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["detail"],
+            "Uploaded file contents do not match the declared file type.",
+        )
 
 
 if __name__ == "__main__":

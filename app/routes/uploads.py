@@ -29,7 +29,10 @@ def register(api: FastAPI) -> None:
         try:
             stored_bytes = await save_upload_file(file, target_path)
             if not matches_declared_type(target_path, mime_type):
-                raise ValueError("Uploaded file contents do not match the declared file type")
+                raise HTTPException(
+                    status_code=400,
+                    detail="Uploaded file contents do not match the declared file type.",
+                )
             if get_user_stored_bytes(user.id) + stored_bytes > user.storage_quota_bytes:
                 raise HTTPException(
                     status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,

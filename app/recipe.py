@@ -143,7 +143,7 @@ async def _get_recipe_from_gemini(selection: DishSelectionRequest) -> RecipeResp
             payload,
             api_key=api_key,
             model=model,
-            timeout=_timeout_from_env(
+            timeout=timeout_from_env(
                 "GEMINI_RECIPE_TIMEOUT_SECONDS",
                 DEFAULT_GEMINI_RECIPE_TIMEOUT_SECONDS,
             ),
@@ -195,6 +195,3 @@ def _normalize_text_list(value: object) -> list[str]:
             normalized.append(cleaned)
     return normalized
 
-
-def _timeout_from_env(name: str, default: float) -> float:
-    return timeout_from_env(name, default)

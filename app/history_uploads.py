@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from app import storage
-from app.history_repository import get_user_stored_bytes, mark_history_deleted
+from app.history_repository import mark_history_deleted
 from app.history_schema import init_history_store
 
 DEFAULT_UPLOAD_RETENTION_DAYS = 30
@@ -80,6 +80,5 @@ __all__ = [
     "cleanup_expired_uploads",
     "delete_history_record",
     "get_upload_retention_days",
-    "get_user_stored_bytes",
     "stored_upload_path",
 ]

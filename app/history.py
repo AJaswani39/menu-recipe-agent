@@ -18,9 +18,3 @@ from app.history_uploads import (
 DATA_DIR = storage.DATA_DIR
 UPLOAD_DIR = storage.UPLOAD_DIR
 DB_PATH = storage.DB_PATH
-
-
-def sync_storage_paths() -> None:
-    storage.DATA_DIR = DATA_DIR
-    storage.UPLOAD_DIR = UPLOAD_DIR
-    storage.DB_PATH = DB_PATH
