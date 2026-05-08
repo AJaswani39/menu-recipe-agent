@@ -105,6 +105,24 @@ Or start both the API and frontend with one command from the project root:
 .\.venv\Scripts\python.exe -m unittest discover -s tests
 ```
 
+## Static checks
+
+Install development dependencies:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+cd frontend
+npm install
+```
+
+Run lint checks:
+
+```powershell
+.\.venv\Scripts\ruff.exe check app api scripts tests
+cd frontend
+npm run lint
+```
+
 ## Administration
 
 ```powershell
