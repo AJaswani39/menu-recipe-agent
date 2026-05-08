@@ -3,10 +3,11 @@ import unittest
 from contextlib import closing
 from datetime import datetime, timedelta, timezone
 
+from helpers import HistoryStoreSandbox
+
 import app.history as history
 from app.auth import create_user
 from app.models import MenuItem, MenuScrapeResponse, RecipeResponse
-from helpers import HistoryStoreSandbox
 
 
 class HistoryStoreTests(HistoryStoreSandbox, unittest.TestCase):

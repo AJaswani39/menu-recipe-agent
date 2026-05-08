@@ -2,11 +2,11 @@ import unittest
 from unittest.mock import AsyncMock, patch
 
 from fastapi.testclient import TestClient
+from helpers import HistoryStoreSandbox
 
 from app.auth import create_user
 from app.main import app
 from app.models import MenuItem, MenuScrapeResponse
-from helpers import HistoryStoreSandbox
 
 
 class UploadRouteTests(HistoryStoreSandbox, unittest.TestCase):

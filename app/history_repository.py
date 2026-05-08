@@ -1,14 +1,14 @@
 import json
+import sqlite3
 from contextlib import closing
 from datetime import datetime, timezone
 
-import sqlite3
+from pydantic import ValidationError
 
 from app import storage
 from app.history_ids import new_public_id
 from app.history_schema import init_history_store
 from app.models import HistoryRecord, HistorySummary, MenuScrapeResponse, RecipeResponse
-from pydantic import ValidationError
 
 
 def create_history_record(

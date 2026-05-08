@@ -5,11 +5,11 @@ from contextlib import closing
 from unittest.mock import AsyncMock, patch
 
 from fastapi.testclient import TestClient
+from helpers import HistoryStoreSandbox
 
 import app.history as history
 from app.auth import create_user
 from app.main import create_app
-from helpers import HistoryStoreSandbox
 
 
 class AuthHardeningTests(HistoryStoreSandbox, unittest.TestCase):

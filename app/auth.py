@@ -8,7 +8,7 @@ from contextlib import closing
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
-from fastapi import Depends, Header, HTTPException, status
+from fastapi import Header, HTTPException, status
 
 from app import storage
 

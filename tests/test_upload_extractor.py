@@ -3,9 +3,9 @@ import unittest
 from pathlib import Path
 
 from app.upload_extractor import (
+    SUPPORTED_MIME_TYPES,
     _inline_payload,
     _menu_from_parsed,
-    SUPPORTED_MIME_TYPES,
 )
 
 

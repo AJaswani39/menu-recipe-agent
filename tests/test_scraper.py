@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from bs4 import BeautifulSoup
 import httpx
+from bs4 import BeautifulSoup
 
 from app.menu_parser import extract_menu_items, extract_price
 from app.scrape_security import reject_private_destination

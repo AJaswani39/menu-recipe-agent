@@ -6,8 +6,8 @@ from pathlib import Path
 from app.gemini import (
     configured_api_key,
     extract_model_text,
-    generate_content,
     gemini_model,
+    generate_content,
     parse_json_response,
     upload_file_to_gemini,
 )

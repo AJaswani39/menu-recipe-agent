@@ -3,8 +3,8 @@ from app.gemini import (
     check_config_status,
     configured_api_key,
     extract_model_text,
-    generate_content,
     gemini_model,
+    generate_content,
     parse_json_response,
     timeout_from_env,
 )
