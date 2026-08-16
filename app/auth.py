@@ -91,7 +91,6 @@ def hash_token(token: str) -> str:
 
 
 def authenticate_token(token: str) -> AuthUser | None:
-    init_auth_store()
     candidate_hash = hash_token(token)
     with closing(_connect()) as conn:
         row = conn.execute(

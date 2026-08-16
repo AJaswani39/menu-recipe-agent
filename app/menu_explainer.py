@@ -8,6 +8,7 @@ from app.gemini import (
     timeout_from_env,
 )
 from app.models import MenuItemExplanationRequest, MenuItemExplanationResponse
+from app.recipe import _normalize_text_list
 
 DEFAULT_GEMINI_EXPLANATION_TIMEOUT_SECONDS = 6.0
 
@@ -157,7 +158,4 @@ def _infer_allergens(text: str) -> list[str]:
     return allergens or ["unknown from menu text"]
 
 
-def _normalize_text_list(value: object) -> list[str]:
-    if not isinstance(value, list):
-        return []
-    return [item.strip() for item in value if isinstance(item, str) and item.strip()]
+

@@ -1,9 +1,9 @@
-import os
 from dataclasses import dataclass
 from urllib.parse import urljoin
 
 import httpx
 
+from app.gemini import timeout_from_env
 from app.scrape_security import validate_scrape_url
 
 DEFAULT_SCRAPER_TIMEOUT_SECONDS = 8.0
@@ -47,11 +47,3 @@ async def fetch_menu_page(restaurant_url: str) -> FetchedMenuPage:
         html=response.text,
         host=parsed.netloc or "unknown-host",
     )
-
-
-def timeout_from_env(name: str, default: float) -> float:
-    try:
-        value = float(os.getenv(name, str(default)))
-    except ValueError:
-        return default
-    return value if value > 0 else default

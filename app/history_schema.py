@@ -29,7 +29,6 @@ def init_history_store() -> None:
         ensure_column(conn, "history", "public_id", "TEXT")
         ensure_column(conn, "history", "stored_bytes", "INTEGER NOT NULL DEFAULT 0")
         ensure_column(conn, "history", "deleted_at", "TEXT")
-        backfill_public_ids(conn)
         conn.execute(
             "CREATE UNIQUE INDEX IF NOT EXISTS idx_history_public_id ON history(public_id)"
         )

@@ -184,11 +184,16 @@ def summary_from_row(row: sqlite3.Row) -> HistorySummary:
 
 
 def record_from_row(row: sqlite3.Row) -> HistoryRecord:
-    summary = summary_from_row(row)
     menu_data = load_json(row["menu_json"])
     recipe_data = load_json(row["recipe_json"])
     return HistoryRecord(
-        **summary.model_dump(),
+        id=row["public_id"],
+        source_type=row["source_type"],
+        restaurant=row["restaurant"],
+        source_label=row["source_label"],
+        created_at=row["created_at"],
+        menu_item_count=len(menu_data.get("menu_items", [])) if menu_data else 0,
+        recipe_dish=recipe_data.get("dish") if recipe_data else None,
         source_url=row["source_url"],
         file_name=row["file_name"],
         mime_type=row["mime_type"],

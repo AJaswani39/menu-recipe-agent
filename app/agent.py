@@ -31,11 +31,14 @@ async def run_agent_request(
         else None
     )
     menu = await _resolve_menu(request, history_record)
-    selected = request.selected_item or _find_menu_item(menu, request.dish_name)
+    if menu:
+        selected = request.selected_item or _find_menu_item(menu, request.dish_name)
+    else:
+        selected = request.selected_item
     recipe = await get_recipe(
         DishSelectionRequest(
             dish_name=selected.name if selected else request.dish_name,
-            restaurant_name=menu.restaurant,
+            restaurant_name=menu.restaurant if menu else request.restaurant_url,
             menu_description=(
                 selected.description if selected else request.menu_description
             ),
@@ -54,18 +57,12 @@ async def run_agent_request(
     return menu, recipe
 
 
-async def _resolve_menu(request: AgentRunRequest, history_record) -> MenuScrapeResponse:
+async def _resolve_menu(request: AgentRunRequest, history_record) -> MenuScrapeResponse | None:
     if history_record and history_record.menu:
         return history_record.menu
     if request.menu:
         return request.menu
-    if request.selected_item:
-        return MenuScrapeResponse(
-            restaurant="Selected menu item",
-            source_url=request.restaurant_url,
-            menu_items=[request.selected_item],
-        )
-    return await scrape_menu(request.restaurant_url)
+    return None
 
 
 def _find_menu_item(menu: MenuScrapeResponse, dish_name: str):

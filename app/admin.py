@@ -1,6 +1,6 @@
 import argparse
 
-from app.auth import create_user
+from app.auth import create_user, init_auth_store
 from app.history_schema import init_history_store
 from app.history_uploads import cleanup_expired_uploads
 
@@ -30,6 +30,7 @@ def main() -> None:
 
     args = parser.parse_args()
     init_history_store()
+    init_auth_store()
 
     if args.command == "create-user":
         user, token = create_user(args.name, args.storage_quota_bytes)
