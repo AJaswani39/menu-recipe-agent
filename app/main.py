@@ -47,7 +47,6 @@ def create_app() -> FastAPI:
     register_routes(api, production=production)
     init_history_store()
     init_auth_store()
-    cleanup_expired_uploads()
     return api
 
 
