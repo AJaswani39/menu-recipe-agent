@@ -14,6 +14,7 @@ from app import storage
 
 DEFAULT_USER_STORAGE_QUOTA_BYTES = 250 * 1024 * 1024
 DEFAULT_UPLOAD_RATE_LIMIT_PER_MINUTE = 10
+DEFAULT_MENU_RATE_LIMIT_PER_MINUTE = 20
 DEFAULT_RECIPE_RATE_LIMIT_PER_MINUTE = 20
 
 
@@ -162,6 +163,10 @@ def get_user_storage_quota_bytes() -> int:
 
 def get_upload_rate_limit_per_minute() -> int:
     return _env_int("UPLOAD_RATE_LIMIT_PER_MINUTE", DEFAULT_UPLOAD_RATE_LIMIT_PER_MINUTE)
+
+
+def get_menu_rate_limit_per_minute() -> int:
+    return _env_int("MENU_RATE_LIMIT_PER_MINUTE", DEFAULT_MENU_RATE_LIMIT_PER_MINUTE)
 
 
 def get_recipe_rate_limit_per_minute() -> int:

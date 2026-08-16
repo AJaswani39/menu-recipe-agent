@@ -1,4 +1,4 @@
-from app.history import get_history_record, update_history_recipe
+from app.history_repository import get_history_record, update_history_recipe
 from app.models import AgentRunRequest, DishSelectionRequest, MenuScrapeResponse, RecipeResponse
 from app.recipe import get_recipe
 from app.scraper import scrape_menu

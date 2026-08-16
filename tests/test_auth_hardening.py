@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, patch
 from fastapi.testclient import TestClient
 from helpers import HistoryStoreSandbox
 
-import app.history as history
+from app import storage
 from app.auth import create_user
 from app.main import create_app
 
@@ -59,7 +59,7 @@ class AuthHardeningTests(HistoryStoreSandbox, unittest.TestCase):
         self.assertEqual(response.json()["restaurant"], "Test Cafe")
 
     def test_token_is_stored_hashed(self):
-        with closing(sqlite3.connect(history.DB_PATH)) as conn:
+        with closing(sqlite3.connect(storage.DB_PATH)) as conn:
             row = conn.execute("SELECT token_hash FROM auth_users").fetchone()
 
         self.assertIsNotNone(row)

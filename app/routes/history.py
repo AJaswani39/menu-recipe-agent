@@ -1,7 +1,8 @@
 from fastapi import Depends, FastAPI, HTTPException
 
 from app.auth import AuthUser, require_user
-from app.history import delete_history_record, get_history_record, list_history
+from app.history_repository import get_history_record, list_history
+from app.history_uploads import delete_history_record
 
 
 def register(api: FastAPI) -> None:

@@ -3,7 +3,8 @@ import logging
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, status
 
 from app.auth import AuthUser, enforce_rate_limit, get_upload_rate_limit_per_minute, require_user
-from app.history import create_history_record, get_user_stored_bytes, stored_upload_path
+from app.history_repository import create_history_record, get_user_stored_bytes
+from app.history_uploads import stored_upload_path
 from app.upload_extractor import SUPPORTED_MIME_TYPES, extract_menu_from_upload
 from app.uploads import discard_upload, matches_declared_type, save_upload_file
 

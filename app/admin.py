@@ -1,7 +1,8 @@
 import argparse
 
 from app.auth import create_user
-from app.history import cleanup_expired_uploads, init_history_store
+from app.history_schema import init_history_store
+from app.history_uploads import cleanup_expired_uploads
 
 
 def main() -> None:

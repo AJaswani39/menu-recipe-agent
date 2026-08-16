@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth import init_auth_store
-from app.history import cleanup_expired_uploads, init_history_store
+from app.history_schema import init_history_store
 from app.routes import register_routes
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
